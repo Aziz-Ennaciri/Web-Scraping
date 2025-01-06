@@ -19,7 +19,7 @@ public class JobController {
 
     @GetMapping("/jobs")
     public String showJobsChart() {
-        return "jobs";
+        return "Jobs";
     }
 
     @GetMapping("/api/job-stats")
