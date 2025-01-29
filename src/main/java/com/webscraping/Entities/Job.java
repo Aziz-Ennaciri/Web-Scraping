@@ -1,4 +1,4 @@
-package com.webscraping.Beans;
+package com.webscraping.Entities;
 
 import jakarta.persistence.*;
 
@@ -13,7 +13,9 @@ public class Job {
     private String title;
     @Column(length = 5000)
     private String description;
-    private String company;
+    @ManyToOne
+    @JoinColumn(name = "company_id",nullable = false)
+    private Company company;
     private String location;
     private String link;
     private LocalDateTime scrapedDate;
@@ -62,11 +64,11 @@ public class Job {
         this.location = location;
     }
 
-    public String getCompany() {
+    public Company getCompany() {
         return company;
     }
 
-    public void setCompany(String company) {
+    public void setCompany(Company company) {
         this.company = company;
     }
 
