@@ -5,11 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class Job {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "job_id")
-    private long id;
+public class Job extends EntityBase{
     private String title;
     @Column(length = 5000)
     private String description;
@@ -22,23 +18,17 @@ public class Job {
 
 
     public Job() {
+        super();
     }
 
-    public Job(long id, String title, String description, String location, String link) {
-        this.id = id;
+    public Job(String title, String description, String location, String link) {
+        super();
         this.title = title;
         this.description = description;
         this.location = location;
         this.link = link;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
