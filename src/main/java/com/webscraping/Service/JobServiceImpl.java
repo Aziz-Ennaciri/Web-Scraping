@@ -1,23 +1,11 @@
 package com.webscraping.Service;
 
-import com.webscraping.Beans.Job;
-import com.webscraping.Exceptions.ScrapingException;
+import com.webscraping.Entities.Job;
 import com.webscraping.Repository.JobRepository;
 import com.webscraping.Service.Inter.IService;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

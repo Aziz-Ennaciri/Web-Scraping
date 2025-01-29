@@ -1,6 +1,6 @@
 package com.webscraping.Service.Inter;
 
-import com.webscraping.Beans.Job;
+import com.webscraping.Entities.Job;
 
 import java.util.List;
 import java.util.Optional;

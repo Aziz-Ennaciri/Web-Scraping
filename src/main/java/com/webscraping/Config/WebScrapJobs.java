@@ -1,7 +1,9 @@
 package com.webscraping.Config;
 
-import com.webscraping.Beans.Job;
+import com.webscraping.Entities.Company;
+import com.webscraping.Entities.Job;
 import com.webscraping.Exceptions.ScrapingException;
+import com.webscraping.Repository.CompanyRepository;
 import com.webscraping.Repository.JobRepository;
 import com.webscraping.Service.JobServiceImpl;
 import org.jsoup.Jsoup;
@@ -36,6 +38,9 @@ public class WebScrapJobs {
 
     @Autowired
     private JobRepository jobRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
 
     @Scheduled(cron = "${scraper.schedule}")
     public void scrapeJobs() {
@@ -77,28 +82,45 @@ public class WebScrapJobs {
             throw new ScrapingException("Failed to scrape jobs", e);
         }
     }
+
     private Job parseJobPost(Element job) {
         Job jobPost = new Job();
         Elements jobCards = job.select(".card-job-detail");
         Elements e = jobCards.select("a");
-        String title  = e.get(0).text().trim();
-        jobPost.setTitle(title);
 
-        String company  = e.get(1).text().trim();
+        String title = e.get(0).text().trim();
+        jobPost.setTitle(title);
+        logger.info("Extracted Job Title: {}", title);
+
+        String companyName = e.get(1).text().trim();
+        logger.info("Extracted Company Name: {}", companyName);
+
+        Company company = companyRepository.findByCompanyName(companyName)
+                .orElseGet(() -> {
+                    logger.info("New company detected, saving: {}", companyName);
+                    Company newCompany = new Company(companyName, null, null);
+                    return companyRepository.save(newCompany);
+                });
+
         jobPost.setCompany(company);
 
         Elements descriptionElement = jobCards.select(".card-job-description");
         String description = descriptionElement.select("p").text().trim();
         jobPost.setDescription(description);
-
+        logger.info("Extracted Description: {}", description);
 
         String location = jobCards.select("ul").select("li").get(3).text().trim();
         jobPost.setLocation(location);
+        logger.info("Extracted Location: {}", location);
+
         return jobPost;
     }
 
+
+
     private boolean isValidJobPost(Job jobPost) {
         return jobPost.getTitle() != null && !jobPost.getTitle().isEmpty() &&
-                jobPost.getCompany() != null && !jobPost.getCompany().isEmpty();
+                jobPost.getCompany() != null &&
+                jobPost.getCompany().getCompanyName() != null && !jobPost.getCompany().getCompanyName().isEmpty();
     }
 }
