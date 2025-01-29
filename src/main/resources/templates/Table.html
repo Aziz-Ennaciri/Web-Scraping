@@ -15,7 +15,7 @@
         <tr th:each="item : ${items}">
             <td th:text="${item.id}"></td>
             <td th:text="${item.title}"></td>
-            <td th:text="${item.company}"></td>
+            <td th:text="${item.company?.companyName}"></td>
             <td th:text="${item.location}"></td>
         </tr>
         </tbody>
