@@ -1,6 +1,6 @@
 package com.webscraping.Controllers;
 
-import com.webscraping.Beans.Job;
+import com.webscraping.Entities.Job;
 import com.webscraping.Service.JobServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
