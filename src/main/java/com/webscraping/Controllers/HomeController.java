@@ -1,6 +1,5 @@
 package com.webscraping.Controllers;
 
-import com.webscraping.Config.WebScrapJobs;
 import com.webscraping.Service.JobServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,12 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
     @Autowired
     private JobServiceImpl jobService;
-    @Autowired
-    private WebScrapJobs scrapJobs;
+
 
     @GetMapping("/")
     public String home(Model model) {
-        scrapJobs.scrapeJobs();
         model.addAttribute("items", jobService.getAllJobs());
         return "index";
     }
