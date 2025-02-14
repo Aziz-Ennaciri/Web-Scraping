@@ -83,7 +83,7 @@ public class WebScrapJobs {
         }
     }
 
-    private Job parseJobPost(Element job) {
+    public Job parseJobPost(Element job) {
         Job jobPost = new Job();
         Elements jobCards = job.select(".card-job-detail");
         Elements e = jobCards.select("a");
@@ -95,12 +95,21 @@ public class WebScrapJobs {
         String companyName = e.get(1).text().trim();
         logger.info("Extracted Company Name: {}", companyName);
 
+        if (companyName == null || companyName.isEmpty()) {
+            logger.error("Company name is missing for job title: {}", title);
+            return null;
+        }
+
         Company company = companyRepository.findByCompanyName(companyName)
                 .orElseGet(() -> {
                     logger.info("New company detected, saving: {}", companyName);
                     Company newCompany = new Company(companyName, null, null);
                     return companyRepository.save(newCompany);
                 });
+        if (company == null) {
+            logger.error("Failed to retrieve or save the company for name: {}", companyName);
+            return null;
+        }
 
         jobPost.setCompany(company);
 
@@ -109,7 +118,7 @@ public class WebScrapJobs {
         jobPost.setDescription(description);
         logger.info("Extracted Description: {}", description);
 
-        String location = jobCards.select("ul").select("li").get(3).text().trim();
+        String location = jobCards.select("ul li:contains(Région de :) strong").text().trim();
         jobPost.setLocation(location);
         logger.info("Extracted Location: {}", location);
 
@@ -118,7 +127,9 @@ public class WebScrapJobs {
 
 
 
-    private boolean isValidJobPost(Job jobPost) {
+
+
+    public boolean isValidJobPost(Job jobPost) {
         return jobPost.getTitle() != null && !jobPost.getTitle().isEmpty() &&
                 jobPost.getCompany() != null &&
                 jobPost.getCompany().getCompanyName() != null && !jobPost.getCompany().getCompanyName().isEmpty();
