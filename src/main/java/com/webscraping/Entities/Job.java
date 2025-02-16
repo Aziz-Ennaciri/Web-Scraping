@@ -29,7 +29,7 @@ public class Job extends EntityBase{
         this.link = link;
     }
 
-    public Job(String javaDeveloper, Company techCorp, String casablanca, String jobDescription, LocalDateTime now) {
+    public Job(String title, Company company, String location, String description, LocalDateTime dateTime) {
     }
 
 
