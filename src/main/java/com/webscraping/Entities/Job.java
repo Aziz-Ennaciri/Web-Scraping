@@ -29,6 +29,9 @@ public class Job extends EntityBase{
         this.link = link;
     }
 
+    public Job(String javaDeveloper, Company techCorp, String casablanca, String jobDescription, LocalDateTime now) {
+    }
+
 
     public String getTitle() {
         return title;
